@@ -1,36 +1,39 @@
-const https = require('https'),
-    Url = require('url');
-
+const https = require('https');
 const config = require('../config/config');
-
-var url = new Url.URL(config.updatesUrl + 'bot' + config.token + '/');
-
-var actions = {
+const actions = {
     getUpdates: {
-        action: 'getUpdates',
+        options: {
+            hostname: config.hostName,
+            path: '/bot' + config.token + '/getUpdates',
+            method: 'POST'
+        },
         data: {
             limit: config.limit,
             timeout: config.timeout,
             offset: 0
         }
     },
+
     sendMessage: {
-        action: 'sendMessage'
+        options: {
+            hostname: config.hostName,
+            path: '/bot' + config.token + '/sendMessage',
+            method: 'POST'
+        }
     }
 }
 
 function getUpdates() {
-    var updateUrl = url + actions['getUpdates'].action;
-    var requestData = actions['getUpdates'].data;
+    const options = actions['getUpdates'].options,
+        data = actions['getUpdates'].data;
 
-    requestData.offset = global.lastUpdateId + 1;
+    data.offset = global.lastUpdateId + 1;
 
-    var jsonStr = JSON.stringify(requestData);
-
-    return sendRequest(updateUrl, jsonStr).then(function (data) {
+    return sendRequest(options, data).then(function (data) {
         return new Promise((resolve, reject) => {
             try {
                 const resObj = JSON.parse(data.body);
+
                 resolve(resObj['result']);
             } catch(e) {
                 reject(e);
@@ -39,14 +42,14 @@ function getUpdates() {
     })
 }
 
-function sendMessage(requestData) {
-    var updateUrl = url + actions['sendMessage'].action;
-    var jsonStr = JSON.stringify(requestData);
+function sendMessage(data) {
+    const options = actions['sendMessage'].options;
 
-    return sendRequest(updateUrl, jsonStr).then(function (data) {
+    return sendRequest(options, data).then(function (data) {
         return new Promise((resolve, reject) => {
             try {
                 const resObj = JSON.parse(data.body);
+
                 resolve(resObj['result']);
             } catch (e) {
                 reject(e);
@@ -59,6 +62,7 @@ function sendRequest(options, data) {
     return new Promise((resolve, reject) => {
         const req = https.request(options, (res) => {
             let body = '';
+            
             res.on('data', (chunk) => (body += chunk.toString()));
             res.on('error', reject);
             res.on('end', () => {
@@ -72,7 +76,7 @@ function sendRequest(options, data) {
 
         req.setHeader('Content-Type', 'application/json');
         req.on('error', reject);
-        req.write(data, 'raw');
+        req.write(JSON.stringify(data), 'raw');
         req.end();
     });
 }
