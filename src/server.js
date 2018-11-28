@@ -21,11 +21,11 @@ var actions = {
 
 function getUpdates() {
     var updateUrl = url + actions['getUpdates'].action;
-    var data = actions['getUpdates'].data;
+    var requestData = actions['getUpdates'].data;
 
-    data.offset = global.lastUpdateId + 1;
+    requestData.offset = global.lastUpdateId + 1;
 
-    var jsonStr = JSON.stringify(data);
+    var jsonStr = JSON.stringify(requestData);
 
     return sendRequest(updateUrl, jsonStr).then(function (data) {
         return new Promise((resolve, reject) => {
@@ -39,9 +39,9 @@ function getUpdates() {
     })
 }
 
-function sendMessage(data) {
-    var updateUrl = url + actions['getUpdates'].action;
-    var jsonStr = JSON.stringify(data);
+function sendMessage(requestData) {
+    var updateUrl = url + actions['sendMessage'].action;
+    var jsonStr = JSON.stringify(requestData);
 
     return sendRequest(updateUrl, jsonStr).then(function (data) {
         return new Promise((resolve, reject) => {
