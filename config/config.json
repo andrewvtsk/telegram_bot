@@ -1,0 +1,8 @@
+{
+    "botname": "FirstMegaBot",
+    "token": "",
+    "updatesUrl": "https://api.telegram.org/",
+    "limit": 100,
+    "timeout": 60,
+    "period": 0
+}

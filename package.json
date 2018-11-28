@@ -1,0 +1,15 @@
+{
+    "name": "my-telegram-bot",
+    "version": "1.0.0",
+    "description": "This example of the telegram bot.",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js"
+    },
+    "author": "Andrii Vatsiuk",
+    "license": "MIT",
+    "dependencies": {},
+    "engines": {
+        "node": "10.x"
+    }
+}
