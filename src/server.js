@@ -19,7 +19,7 @@ var actions = {
     }
 }
 
-function getUpdates() {git init
+function getUpdates() {
     var updateUrl = url + actions['getUpdates'].action;
     var data = actions['getUpdates'].data;
 
